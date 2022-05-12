@@ -1,7 +1,9 @@
 import type { NextPage } from 'next'
+import { useState  } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Hero from '../components/Hero'
+import FormModal from '../components/FormModal'
 import NavBar from '../components/NavBar'
 import { sanityClient, urlFor } from "../sanity"
 import { Post } from '../typings'
@@ -11,8 +13,16 @@ interface Props {
 }
 
 export default function Home({ posts }: Props) {
+
+  const [modalOn, setModalOn] = useState(false)
+  const [choice, setChoice] = useState(false)
+
+  const clicked = () => (
+    setModalOn(true)
+  )
+
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className={`${modalOn ? "overflow-y-hidden" : ""} flex min-h-screen flex-col bg-background`}>
       <Head>
         <title>Juan Carlos Rojas's Web Portfolio</title>
         <link rel="icon" href="/favicon.ico" />
@@ -21,9 +31,11 @@ export default function Home({ posts }: Props) {
       <main className="">
         <NavBar />
         
-        <Hero />
+        <Hero setModalOn={setModalOn} />
+
+        {modalOn && <FormModal setModalOn={setModalOn} setChoice={setChoice} />}
         {/* className='bg-gradient-to-tr from-lightblue to-primary h-screen' */}
-        <div className='bg-gradient-to-tr from-yellow-400 to-primary h-screen'>
+        <div className={`${modalOn ? "hidden" : ""} bg-gradient-to-tr from-yellow-400 to-primary h-screen`}>
           <h3 className='text-white font-bold text-3xl pt-5 max-w-lg text-center mx-auto'>Blog Posts</h3>
           <hr className='max-w-lg my-5 mx-auto border max-h-1'/>
 

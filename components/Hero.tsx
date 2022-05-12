@@ -1,6 +1,15 @@
 import React from 'react'
 
-function Hero() {
+interface Props {
+    setModalOn: (on: boolean) => void
+}
+
+function Hero({setModalOn}: Props) {
+
+    const openModal = () => {
+        setModalOn(true)
+    }
+
   return (
     <div className='flex flex-col h-screen justify-center my-auto ml-10 md:ml-28'>
         <div className='hidden xl:inline-flex relative xl:ml-[710px] 2xl:ml-[850px] opacity-80'>
@@ -10,7 +19,7 @@ function Hero() {
         </div>
         <h2 className='text-lightgray relative max-w-md md:max-w-none md:pr-16 text-7xl font-bold'>Hello! I'm <span className='text-primary'> Juan Carlos</span></h2>
         <h1 className='text-lightgray relative max-w-md md:max-w-none md:pr-16 text-4xl font-bold'>Software Developer from <span className='text-secondary'> Costa Rica</span></h1>
-        <button className='text-sale-800 relative bg-primary font-semibold h-14 w-48 border rounded-xl mt-5 cursor-pointer hover:bg-secondary hover:text-lightgray hover:rounded-xl transition-all'>Get in contact :)</button>
+        <button onClick={openModal} className='text-sale-800 relative bg-primary font-semibold h-14 w-48 border rounded-xl mt-5 cursor-pointer hover:bg-secondary hover:text-lightgray hover:rounded-xl transition-all'>Get in contact :)</button>
     </div>
   )
 }
