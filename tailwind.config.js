@@ -7,7 +7,10 @@ module.exports = {
     extend: {
       animation: {
         blob: "blob 7s infinite",
-        translateUp: "translateUpBlob 7s infinite"
+        fadeIn: "fadeIn 1s ease-in forwards"
+      },
+      variants: {
+        animation: ["motion-safe"]
       },
       keyframes: {
         blob: {
@@ -23,6 +26,10 @@ module.exports = {
           "100%": {
             transform: "translate(0px, 0px) scale(1)"
           }
+        },
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100": { opacity: 1 }
         }
       },
       colors: {

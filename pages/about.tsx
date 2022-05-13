@@ -11,7 +11,7 @@ interface Icon {
 
 function about() {
   return (
-      <main className="bg-lightgray relative">
+      <main className="bg-lightgray relative animate-fadeIn">
         <NavBar  />
 
         <div className="flex flex-col absolute my-auto h-auto top-52 lg:top-0 lg:min-h-screen justify-evenly items-center lg:flex-row lg:justify-between">

@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useState  } from 'react'
+import { useCallback, useEffect, useRef, useState  } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Hero from '../components/Hero'
@@ -17,9 +17,28 @@ export default function Home({ posts }: Props) {
   const [modalOn, setModalOn] = useState(false)
   const [choice, setChoice] = useState(false)
 
-  const clicked = () => (
-    setModalOn(true)
-  )
+  const callback = (entries: IntersectionObserverEntry[]) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("motion-safe:animate-fadeIn")
+          } else {
+            entry.target.classList.remove("motion-safe:animate-fadeIn")
+          }
+        })
+      }
+
+  useEffect(() => {
+    const targets = document.querySelectorAll(".js-show-on-scroll")
+    const observer = new IntersectionObserver(callback)
+
+    targets.forEach((target) => {
+      target.classList.remove("motion-safe:animate-fadeIn")
+  
+      observer.observe(target)
+    })
+  })
+  
+    
 
   return (
     <div className={`${modalOn ? "overflow-y-hidden" : ""} flex min-h-screen flex-col bg-background`}>
@@ -36,10 +55,10 @@ export default function Home({ posts }: Props) {
         {modalOn && <FormModal setModalOn={setModalOn} setChoice={setChoice} />}
         {/* className='bg-gradient-to-tr from-lightblue to-primary h-screen' */}
         <div className={`${modalOn ? "hidden" : ""} bg-gradient-to-tr from-yellow-400 to-primary h-screen`}>
-          <h3 className='text-white font-bold text-3xl pt-5 max-w-lg text-center mx-auto'>Blog Posts</h3>
-          <hr className='max-w-lg my-5 mx-auto border max-h-1'/>
+          <h3 className='text-white font-extrabold text-5xl pt-5 pl-0 pb-0 js-show-on-scroll text-center mx-auto '>Blog Posts</h3>
+          <hr className='max-w-md mb-10 mt-2 mx-auto border border-white max-h-1 js-show-on-scroll'/>
 
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md-gap-6 p-2 md:-6 max-w-7xl mx-auto'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 js-show-on-scroll lg:grid-cols-3 gap-3 md-gap-6 p-2 md:-6 max-w-7xl mx-auto'>
            {posts.map((post) => (
              <Link key={post._id} href={`/post/${post.slug.current}`}>
                 <div className='border rounded-lg group cursor-pointer overflow-hidden'>

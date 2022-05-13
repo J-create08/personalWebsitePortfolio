@@ -31,35 +31,27 @@ function FormModal({setModalOn, setChoice}: Props) {
 
     const onSubmit: SubmitHandler<IFormInput> = async(data) => {
         setDisabled(true) 
-        try {
-            await send(
-                process.env.EMAILJS_SERVICE_ID!,
-                process.env.EMAILJS_TEMPLATE_ID!,
-                data,
-                process.env.EMAILJS_PUBLIC_KEY!
-            ).then(() => {
-                console.log(data);
-                setSubmitted(true);
-            }).catch((err) => {
-                console.log(err);
-                setDisabled(false)
-                setSubmitted(false);
-            })
-        } catch(e) {
-            console.log(e);
-            setDisabled(false)
-            setEmailError(true)
-            setSubmitted(true)
-        }
+        await fetch('/api/createMessage', {
+            method: "POST",
+            body: JSON.stringify(data)
+        }).then(() => {
+            console.log(data);
+            setSubmitted(true);
+        }).catch((err) => {
+            console.log(err);
+            setDisabled(false);
+            setEmailError(true);
+            setSubmitted(false);
+        });
         
     };
 
   return (
-    <div className='fixed overflow-scroll inset-0 z-50'>
+    <div className='fixed overflow-scroll inset-0 z-50 bg-slate-400 bg-opacity-80'>
+        
         <div className='relative w-screen h-screen'>
-            
-            <div className='flex relative pt-6 justify-center h-screen items-center'>
-                <div className='absolute top-0 left-0 h-screen -z-10 w-screen opacity-80 bg-slate-400'/>
+
+            <div className='flex relative py-6 justify-center h-screen items-center'>
 
                 {submitted ? (
                     emailError ? (
@@ -72,12 +64,13 @@ function FormModal({setModalOn, setChoice}: Props) {
                     ):
                     <div className='flex flex-col absolute pt-6 z-50 bg-slate-700 justify-center h-40 w-64 border-2 border-primary rounded-xl items-center'>
                         <p className='text-xs font-bold text-white text-center max-w-[160px] pb-6'>
-                            Thank for your message! I'll get back to you as soon as possible. :)
+                            Thanks for your message! I'll get back to you as soon as possible. :)
                         </p>
                         <button onClick={onClick} className='bg-primary text-sm font-bold border rounded-lg py-1 px-2 mb-3 text-white hover:bg-secondary'>Dismiss</button>
                     </div> 
                 ): 
-                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col p-5 max-w-2xl bg-white mx-auto mb-10 border-primary rounded-xl' >
+                <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col relative p-5 max-w-2xl bg-white mx-auto  border-primary rounded-xl' >
+                    {/* <div className='absolute -top-8 h-[105%] -left-48 w-[200%] -z-10 opacity-80 bg-slate-400 sm:hidden'/> */}
                     <h3 className='text-sm text-secondary' >Have some comments or just want to say hi?</h3>
                     <h4 className='text-3xl font-bold' >Leave your message bellow!</h4>
                     <hr className='py-2 mt-2' />
@@ -118,12 +111,13 @@ function FormModal({setModalOn, setChoice}: Props) {
                         <input disabled={disabled} type="submit" className='bg-primary hover:bg-green-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer' />
                         <input disabled={disabled} type="button" value="Cancel" onClick={onClick} className='bg-yellow-400 hover:bg-yellow-500 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded cursor-pointer' />
                     </div>
-            
+                    
                  </form>
                 }
                 
                 
             </div>
+            
         </div>
         
         
